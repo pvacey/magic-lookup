@@ -1,6 +1,7 @@
 <script>
   import {afterUpdate, onMount, tick} from 'svelte';
   import SearchResult from './SearchResult.svelte';
+  import Card from './Card.svelte';
 
   let imageURL = '';
   let queryString = '';
@@ -16,7 +17,7 @@
   let cardSpace;
   let cardHeight;
   let cardBack = "https://backs.scryfall.io/large/2/2/222b7a3b-2321-4d4c-af19-19338b134971.jpg?1677416389";
-  let selectedCard = "https://backs.scryfall.io/large/2/2/222b7a3b-2321-4d4c-af19-19338b134971.jpg?1677416389";
+  let selectedCard = {image:cardBack};
   let stuffheight;
   let historyHeight;
   let clickedCard = selectedCard;
@@ -43,22 +44,25 @@
     fetch("https://api.scryfall.com/cards/named?exact=" + cardName)
           .then((response) => response.json())
           .then((data) => {
-              console.log(data)
+
               if (!("image_uris" in data)){
                   data = data.card_faces[0]
               }
-              cards.push(data.image_uris.normal);
+              let thisCard = {
+                image: data.image_uris.normal,
+                link: data.scryfall_uri,
+              };
+              cards.push(thisCard);
+              
               // cards = cards;
               displayCards = cards.toReversed();
               suggestions = [];
               queryString = '';
               vis = 'visible';
 
-              clickedCard = data.image_uris.normal;
-              selectedCard = data.image_uris.normal;
 
-              clickedCard = data.image_uris.normal;
-              selectedCard = data.image_uris.normal;
+              clickedCard = thisCard;
+              selectedCard = thisCard;
               localStorage.setItem("clickedCard", JSON.stringify(clickedCard));
               localStorage.setItem("selectedCard", JSON.stringify(selectedCard));
               localStorage.setItem("cards", JSON.stringify(cards));
@@ -69,7 +73,7 @@
 
   
   const selectFirst = (event) => {
-    
+
       if (event.key === 'Enter' && suggestions.length > 0) {
           if (!highlightedSuggestion){
               highlightedSuggestion = suggestions[0]
@@ -134,7 +138,7 @@
   const clickClear = (event) => {
       cards = [];
       displayCards = [];
-      selectedCard = cardBack;
+      selectedCard = {image:cardBack};
       vis = 'hidden';
       console.log('click');
 
@@ -144,19 +148,27 @@
       localStorage.removeItem("displayCards");
   }
 
-  const clickCard = (event) => {
-      clickedCard = event.target.src;
-      selectedCard = clickedCard
-      localStorage.setItem("clickedCard", JSON.stringify(clickedCard));
-      localStorage.setItem("selectedCard", JSON.stringify(selectedCard));
+  const cardMessage = (event) => {
+    let event_type = event.detail.type
+    switch (event_type) {
+        case 'mouseenter':
+            selectedCard = event.detail.data
+            break;
+        case 'mouseleave':
+            selectedCard = clickedCard
+            break;
+        case 'click':
+            clickedCard = event.detail.data
+            selectedCard = clickedCard
+            localStorage.setItem("clickedCard", JSON.stringify(clickedCard));
+            localStorage.setItem("selectedCard", JSON.stringify(selectedCard));
+        default:
+    }
   };
 
-  const mouseLeaveCard = (event) => {
-      selectedCard = clickedCard
-  };
-  const mouseEnterCard = (event) => {
-      selectedCard = event.target.src
-  };
+  const openScryfall = (event) => {
+    window.open(selectedCard.link)
+  }
 
 </script>
 
@@ -187,7 +199,7 @@
   <div class="searchboxpadding" bind:this={padding}></div>
 
   <div class="selectedcard">
-      <img src={selectedCard}>
+      <img src={selectedCard.image} on:click={openScryfall}>
   </div>
 
   <div class="" style="text-align: center; padding:5px;">history</div>
@@ -196,11 +208,7 @@
       <div class="cardhistory" style="padding-top: {(cardSpace/4)+35}px; height: {historyHeight - ((cardSpace/4)+35)}px">
           {#if displayCards.length > 0}
           {#each displayCards as card}
-              <div class="cardspacer" style="height: {cardSpace}px; margin-top: -{cardSpace/4}px">
-                  <div class="card" style="transform: rotate({(Math.random()*1.5) -1}deg) translateX({Math.random()*10}px);" >
-                      <img src={card} alt="" on:mouseenter={mouseEnterCard} on:mouseleave={mouseLeaveCard} on:click={clickCard}>
-                  </div>
-              </div>
+              <Card cardSpace={cardSpace} data={card} on:message={cardMessage}/>
           {/each} 
           {/if}
           <div class="cardspacer" style="height: {cardHeight}px; margin-top: -{cardSpace/4}px">
