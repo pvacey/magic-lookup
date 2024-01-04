@@ -43,8 +43,8 @@
     fetch("https://api.scryfall.com/cards/named?exact=" + cardName)
           .then((response) => response.json())
           .then((data) => {
-              if ("card_faces" in data){
-                  console.log('yes, found it')
+              console.log(data)
+              if (!("image_uris" in data)){
                   data = data.card_faces[0]
               }
               cards.push(data.image_uris.normal);
@@ -69,11 +69,7 @@
 
   
   const selectFirst = (event) => {
-      // if (activeIndex == 0) {
-      //     suggestionElements.children[0].style.background='#ece8d9'
-      //     // suggestions = suggestions
-      // }
-
+    
       if (event.key === 'Enter' && suggestions.length > 0) {
           if (!highlightedSuggestion){
               highlightedSuggestion = suggestions[0]
