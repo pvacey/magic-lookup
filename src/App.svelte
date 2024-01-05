@@ -45,7 +45,7 @@
           .then((response) => response.json())
           .then((data) => {
 
-              let image = (!("image_uris" in data)) ? data = data.card_faces[0].data.image_uris.normal : data.image_uris.normal;
+              let image = (!("image_uris" in data)) ? data.card_faces[0].image_uris.normal : data.image_uris.normal;
 
               let thisCard = {
                 image: image,
@@ -177,8 +177,6 @@
 </head>
 
 
-
-
 <div class="searchbox" bind:this={searchBox}>
   <div class="searchboxinner">
       <input type="text" placeholder="search..." bind:this={textInputElement} bind:value={queryString} on:input={searchCards} on:keydown={selectFirst}>
@@ -195,13 +193,12 @@
 <div class="root" style="visibility:{vis}">
   <div bind:this={stuffheight}>
       
-  <div class="searchboxpadding" bind:this={padding}></div>
+    <div class="searchboxpadding" bind:this={padding}></div>
 
-  <div class="selectedcard">
-      <img src={selectedCard.image} on:click={openScryfall}>
-  </div>
+    <div class="selectedcard">
+        <img src={selectedCard.image} on:click={openScryfall}>
+    </div>
 
-  <div class="" style="text-align: center; padding:5px;">history</div>
   </div>
   <div class="cardhistorycontainer">
       <div class="cardhistory" style="padding-top: {(cardSpace/4)+35}px; height: {historyHeight - ((cardSpace/4)+35)}px">
@@ -220,106 +217,3 @@
   
 </div>
 <svelte:window on:resize={handleResize} on:keypress={refocus} />
-
-<style>
-  /* https://palettes.shecodes.io/palettes/1667 */
-  input[type=text] {
-      font-family: inherit;
-      font-weight: inherit;
-      font-size: large;
-      width: 100%;
-      padding: 12px 40px;
-      box-sizing: border-box;
-      border-left: none;
-      border-right: none;
-      border-top: 2px solid #494949;
-      border-bottom: 2px solid #494949;
-      /* border-radius: 5vmax; */
-      outline: none;
-      /* transition: 0.25s; */
-      background-color: #494949;
-      color: #fffdf6;
-  }
-  input[type=text]:focus {
-      border-color: #494949;
-      /* caret-color: transparent; */
-  }input[type=text]:hover {
-      border-color: #494949;
-  }
-  :global(body) {
-      font-family: 'Space Mono', serif;
-      font-weight: 300;
-      font-size: large;
-      margin: 0;
-      background-color: #fffdf6;
-  }
-  .root{
-      width: 100%;
-      height: 100vh;
-      box-sizing: border-box;
-      color: #494949;
-      display: flex;
-      flex-direction: column;
-      min-height:100%;
-      
-  }
-  .searchbox{
-      width: 100%;
-      position: absolute;
-      z-index: 1;
-      filter: drop-shadow(0px 0px 5px #666);
-  }
-  .searchbox:hover{
-  }
-  .searchboxinner{
-      width: 100%;
-  }
-  .searchresultsbox{
-      background-color: #FFF;
-      margin-right: inherit;
-  }
-  .searchboxpadding {
-      /* padding-bottom: 20px; */
-  }
-  .cardhistorycontainer {
-      display: flex;
-      /* align-items: center; */
-      justify-content: center;
-  }
-  .cardhistory{
-      /* box-shadow: inset 0px 40px 20px -50px #666; */
-      overflow-y: scroll;
-      scrollbar-width: none;
-      
-      padding-right: 40px;
-      padding-left: 40px;
-  }
-  .cardspacer{
-      cursor: pointer;
-  }
-  .card {
-      
-      filter: drop-shadow(0px 0px 10px #666);
-      position: relative;
-  }
-  .cardspacer:hover{
-      cursor: pointer;
-      filter: drop-shadow(0px 0px 5px white);
-      transform: translateY(-10px) rotate(0.5deg);
-      /* transform: translateY(-10px) perspective(400px) rotate3d(-12, 0 , 0, 5deg); */
-  }
-  .selectedcard {
-      padding: 20px;
-      filter: drop-shadow(0px 0px 10px #666);
-  }
-  img {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      max-width: 100%;
-      height: auto;
-      max-height: 45vh;
-      border-radius: 4.75% 3.5%;
-      
-  }
-</style>
