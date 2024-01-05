@@ -45,15 +45,11 @@
           .then((response) => response.json())
           .then((data) => {
 
-              let scryfall_uri = data.scryfall_uri
-              if (!("image_uris" in data)){
-                  data = data.card_faces[0]
-              }
+              let image = (!("image_uris" in data)) ? data = data.card_faces[0].data.image_uris.normal : data.image_uris.normal;
 
-              console.log(data)
               let thisCard = {
-                image: data.image_uris.normal,
-                link: scryfall_uri,
+                image: image,
+                link: data.scryfall_uri,
               };
               cards.push(thisCard);
               
