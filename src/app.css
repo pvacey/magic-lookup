@@ -83,9 +83,26 @@ body {
   transform: translateY(-10px) rotate(0.5deg);
   /* transform: translateY(-10px) perspective(400px) rotate3d(-12, 0 , 0, 5deg); */
 }
-.selectedcard {
-  padding: 20px;
+.selectedcardbox {
+  width: auto;
+  display: flex;
+  justify-content: center;
+}
+.selectedcardelement {
+  position: relative;
+}
+.selectedcard { 
+  padding: 10px;
   filter: drop-shadow(0px 0px 10px #666);
+}
+.flipButton {
+  position:absolute;
+  top:5px;
+  left:5px;
+  border:3px solid #494949;
+  padding:5px;
+  cursor: pointer;
+  background-color: white;
 }
 img {
   display: block;
@@ -94,10 +111,8 @@ img {
   max-width: 100%;
   height: auto;
   max-height: 45vh;
-  border-radius: 4.75% 3.5%;
-  
+  border-radius: 4.75% 3.5%; 
 }
-
 .searchitem{
   width: 100%;
   padding: 12px 20px;
