@@ -3,7 +3,7 @@
     import SearchResult from "./SearchResult.svelte";
     import Card from "./Card.svelte";
 
-    let schemaVersion = "1";
+    let schemaVersion = "2";
     let imageURL = "";
     let queryString = "";
     let suggestions = [];
@@ -49,10 +49,12 @@
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
+                let price = (data.prices.usd == null) ? 'price not listed for this print' : `$${data.prices.usd}`
                 let thisCard = {
                     front: "",
                     link: data.scryfall_uri,
                     active: "front",
+                    price: price
                 };
                 try {
                     if ("card_faces" in data) {
@@ -197,12 +199,6 @@
     const cardMessage = (event) => {
         let event_type = event.detail.type;
         switch (event_type) {
-            case "mouseenter":
-                selectedCard = event.detail.data;
-                break;
-            case "mouseleave":
-                selectedCard = clickedCard;
-                break;
             case "click":
                 clickedCard = event.detail.data;
                 selectedCard = clickedCard;
@@ -273,6 +269,7 @@
             </div>
         </div>
     </div>
+    <div style="text-align: center; padding-bottom: 10px">{selectedCard.price}</div>
     <div class="cardhistorycontainer">
         <div
             class="cardhistory"
