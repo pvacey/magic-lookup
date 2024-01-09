@@ -14,7 +14,7 @@
 </script>
 
 <div class="cardspacer" style="height: {cardSpace}px; margin-top: -{cardSpace/4}px">
-    <div class="card" style="transform: rotate({(Math.random()*1.5) -1}deg) translateX({Math.random()*10}px);" >
+    <div class="card" style="transform: rotate({(Math.random()*2) -2}deg) translateX({Math.random()*10}px);" >
         <img src={data[data.active]} on:click={clickCard}/>
     </div>
 </div>
