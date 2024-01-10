@@ -57,11 +57,11 @@
                     price: price
                 };
                 try {
-                    if ("card_faces" in data) {
+                    if ("image_uris" in data) {
+                        thisCard.front = data.image_uris.normal;
+                    } else {
                         thisCard.front = data.card_faces[0].image_uris.normal;
                         thisCard.back = data.card_faces[1].image_uris.normal;
-                    } else {
-                        thisCard.front = data.image_uris.normal;
                     }
                 } catch (error) {
                     suggestions = [];
